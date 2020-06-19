@@ -1,2 +1,2 @@
 # DownloadManager
-C# Class Library, you can extend download  protocol(http, ftp or others)
+C# simple Class Library, you can extend download  protocol(http, ftp or others), different download methods(automatic, manual and others).
