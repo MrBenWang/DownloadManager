@@ -11,9 +11,6 @@
         MD5Checking = 6,
         DownloadFailed_MD5CheckFailed = 7,
         DownloadSuccess = 8,
-        ExtractingFile = 9,
-        ReadyForUse = 10,
-        ExtractFileFailed = 11,
-        UnKnowm = 12
+        UnKnowm = 9
     }
 }
