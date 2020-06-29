@@ -11,7 +11,7 @@ namespace DownloadManager.DownloadBase
     public abstract class DownloadControlerAbstract<T> where T : DownloadWorkItemAbstract
     {
         private readonly int m_MaxDownloadCount;
-        private readonly object m_lock = new object();
+        private readonly object m_lockList = new object();
         private readonly Dictionary<string, T> m_DownloadResourceList;
 
         protected event EventHandler<DownloadStatusChangedEventArgs> OnDownloadStatusChanged;
@@ -29,7 +29,7 @@ namespace DownloadManager.DownloadBase
         {
             get
             {
-                lock (m_lock)
+                lock (m_lockList)
                 {
                     return m_DownloadResourceList.Count >= m_MaxDownloadCount;
                 }
@@ -48,7 +48,7 @@ namespace DownloadManager.DownloadBase
                 return ExecuteResult.Faile;
             }
 
-            lock (m_lock)
+            lock (m_lockList)
             {
                 if (m_DownloadResourceList.ContainsKey(_targetResource.ResourceInfo.ResourceKey))
                 {
@@ -136,7 +136,7 @@ namespace DownloadManager.DownloadBase
                 return ExecuteResult.Faile;
             }
 
-            lock (m_lock)
+            lock (m_lockList)
             {
                 string _resourceKey = _targetResource.ResourceInfo.ResourceKey;
                 if (m_DownloadResourceList.ContainsKey(_resourceKey))
@@ -157,7 +157,7 @@ namespace DownloadManager.DownloadBase
 
         public ExecuteResult RemoveResource(T _targetResource)
         {
-            lock (m_lock)
+            lock (m_lockList)
             {
                 if (m_DownloadResourceList.ContainsKey(_targetResource.ResourceInfo.ResourceKey))
                 {
@@ -170,7 +170,7 @@ namespace DownloadManager.DownloadBase
 
         public ExecuteResult DownloadStopAllResources()
         {
-            lock (m_lock)
+            lock (m_lockList)
             {
                 foreach (var _item in m_DownloadResourceList.Values)
                 {

@@ -19,21 +19,26 @@ namespace DownloadManager.DownloadBase.HTTP
 
         public event EventHandler<DownloadStatusChangedEventArgs> OnUpdateStatusCallBack;
 
+        private object m_lockPush = new object();
+
         /// <summary>
         /// add resource to downloading list, until downloading.count equal MAX_COUNT
         /// </summary>
         public void LoopPushResourceUntilDownloadMax()
         {
-            DownloadResourceAbstract _nexResource;
-            while (!IsFullDownloading)
+            lock (m_lockPush)
             {
-                _nexResource = GetNextWairForDownloadResource();
-                if (_nexResource == null)
+                DownloadResourceAbstract _nexResource;
+                while (!IsFullDownloading)
                 {
-                    break; // no wait for download resource
-                }
+                    _nexResource = GetNextWairForDownloadResource();
+                    if (_nexResource == null)
+                    {
+                        break; // no wait for download resource
+                    }
 
-                AddResource(new HttpDownloadWorkItem(_nexResource));
+                    AddResource(new HttpDownloadWorkItem(_nexResource));
+                }
             }
         }
 
